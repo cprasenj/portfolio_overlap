@@ -83,17 +83,17 @@ public class FundOverlapTest {
         );
         assertEquals(
                 Arrays.asList(
-                        "AXIS_BLUECHIP MIRAE_ASSET_EMERGING_BLUECHIP 39.13%",
-                        "ICICI_PRU_BLUECHIP MIRAE_ASSET_EMERGING_BLUECHIP 38.10%",
-                        "UTI_NIFTY_INDEX MIRAE_ASSET_EMERGING_BLUECHIP 65.52%"
+                        "MIRAE_ASSET_EMERGING_BLUECHIP AXIS_BLUECHIP 39.13%",
+                        "MIRAE_ASSET_EMERGING_BLUECHIP ICICI_PRU_BLUECHIP 38.10%",
+                        "MIRAE_ASSET_EMERGING_BLUECHIP UTI_NIFTY_INDEX 65.52%"
                 ),
                 fundOverlap.execute("CALCULATE_OVERLAP MIRAE_ASSET_EMERGING_BLUECHIP")
         );
         assertEquals(
                 Arrays.asList(
-                        "AXIS_BLUECHIP MIRAE_ASSET_LARGE_CAP 43.75%",
-                        "ICICI_PRU_BLUECHIP MIRAE_ASSET_LARGE_CAP 44.62%",
-                        "UTI_NIFTY_INDEX MIRAE_ASSET_LARGE_CAP 95.00%"
+                        "MIRAE_ASSET_LARGE_CAP AXIS_BLUECHIP 43.75%",
+                        "MIRAE_ASSET_LARGE_CAP ICICI_PRU_BLUECHIP 44.62%",
+                        "MIRAE_ASSET_LARGE_CAP UTI_NIFTY_INDEX 95.00%"
                 ),
                 fundOverlap.execute("CALCULATE_OVERLAP MIRAE_ASSET_LARGE_CAP")
         );
@@ -103,11 +103,50 @@ public class FundOverlapTest {
         );
         assertEquals(
                 Arrays.asList(
-                        "AXIS_BLUECHIP MIRAE_ASSET_EMERGING_BLUECHIP 38.71%",
-                        "ICICI_PRU_BLUECHIP MIRAE_ASSET_EMERGING_BLUECHIP 38.10%",
-                        "UTI_NIFTY_INDEX MIRAE_ASSET_EMERGING_BLUECHIP 65.52%"
+                        "MIRAE_ASSET_EMERGING_BLUECHIP AXIS_BLUECHIP 38.71%",
+                        "MIRAE_ASSET_EMERGING_BLUECHIP ICICI_PRU_BLUECHIP 38.10%",
+                        "MIRAE_ASSET_EMERGING_BLUECHIP UTI_NIFTY_INDEX 65.52%"
                 ),
                 fundOverlap.execute("CALCULATE_OVERLAP MIRAE_ASSET_EMERGING_BLUECHIP")
         );
+    }
+
+    @Test
+    public void shouldExecuteGivenSetOfCommandsScenario2() throws IOException {
+        PortfolioOverlapService portfolioOverlapService = new PortfolioOverlapService(new FileSystemFundsDao(null));
+        FundOverlap fundOverlap = new FundOverlap(new ArrayList<>(), portfolioOverlapService);
+        assertEquals(
+                new ArrayList<>(),
+                fundOverlap.execute("CURRENT_PORTFOLIO UTI_NIFTY_INDEX AXIS_MIDCAP PARAG_PARIKH_FLEXI_CAP")
+        );
+        assertEquals(
+                Arrays.asList(
+                        "ICICI_PRU_NIFTY_NEXT_50_INDEX UTI_NIFTY_INDEX 20.37%",
+                        "ICICI_PRU_NIFTY_NEXT_50_INDEX AXIS_MIDCAP 14.81%",
+                        "ICICI_PRU_NIFTY_NEXT_50_INDEX PARAG_PARIKH_FLEXI_CAP 7.41%"
+                ),
+                fundOverlap.execute("CALCULATE_OVERLAP ICICI_PRU_NIFTY_NEXT_50_INDEX")
+        );
+        assertEquals(
+                Collections.singletonList("FUND_NOT_FOUND"),
+                fundOverlap.execute("CALCULATE_OVERLAP NIPPON_INDIA_PHARMA_FUND")
+        );
+        assertEquals(
+                Collections.emptyList(),
+                fundOverlap.execute("ADD_STOCK PARAG_PARIKH_FLEXI_CAP NOCIL")
+        );
+        assertEquals(
+                Collections.emptyList(),
+                fundOverlap.execute("ADD_STOCK AXIS_MIDCAP NOCIL")
+        );
+        assertEquals(
+                Arrays.asList(
+                        "ICICI_PRU_NIFTY_NEXT_50_INDEX UTI_NIFTY_INDEX 20.37%",
+                        "ICICI_PRU_NIFTY_NEXT_50_INDEX AXIS_MIDCAP 14.68%",
+                        "ICICI_PRU_NIFTY_NEXT_50_INDEX PARAG_PARIKH_FLEXI_CAP 7.32%"
+                ),
+                fundOverlap.execute("CALCULATE_OVERLAP ICICI_PRU_NIFTY_NEXT_50_INDEX")
+        );
+
     }
 }

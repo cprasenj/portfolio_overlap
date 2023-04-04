@@ -28,6 +28,6 @@ public class Overlap {
 
     @Override
     public String toString() {
-        return one + " " + another + " " + String.format("%.02f", overlapPercentage) + "%";
+        return another + " " + one + " " + String.format("%.02f", overlapPercentage) + "%";
     }
 }
