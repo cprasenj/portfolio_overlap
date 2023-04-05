@@ -59,7 +59,6 @@ test { ///Please do not change this
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 //Add your dependencies here
